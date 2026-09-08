@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#004587">
+  <title>Perfil Literário | Biblioteca Senac</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="ambient-glow ambient-glow--one"></div>
+  <div class="ambient-glow ambient-glow--two"></div>
+
+  <header class="topbar no-print">
+    <a class="brand" href="/" aria-label="Página inicial">
+      <span class="brand__mark" aria-hidden="true">B</span>
+      <span>
+        <strong>Perfil Literário</strong>
+        <small>Biblioteca Senac</small>
+      </span>
+    </a>
+  </header>
+
+  <main class="app-shell">
+    <section id="introScreen" class="intro-screen">
+      <div class="intro-copy">
+        <span class="eyebrow">Uma experiência de leitura personalizada</span>
+        <h1>Abra o livro e descubra quem você é como leitor.</h1>
+        <p>Responda a seis perguntas. No fim, você recebe seu personagem literário e cinco recomendações retiradas do acervo da biblioteca.</p>
+        <div class="intro-stats" aria-label="Informações do sistema">
+        
+        </div>
+        <button id="startButton" class="primary-button primary-button--large" type="button">
+          <span>Começar descoberta</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+
+      <div class="hero-book" aria-hidden="true">
+        <div class="hero-book__shadow"></div>
+        <div class="hero-book__cover">
+          <span class="hero-book__kicker">Biblioteca</span>
+          <div class="hero-book__ornament">✦</div>
+          <h2>Meu<br>Perfil<br>Literário</h2>
+          <div class="hero-book__rule"></div>
+          <span class="hero-book__footer">Uma carta para cada leitor</span>
+        </div>
+        <div class="hero-book__pages"></div>
+      </div>
+    </section>
+
+    <section id="quizScreen" class="quiz-screen is-hidden" aria-live="polite">
+      <div class="quiz-heading no-print">
+        <div>
+          <span class="eyebrow">Capítulo <span id="chapterNumber">1</span> de 6</span>
+          <h2 id="chapterTitle">Seu ritmo de leitura</h2>
+        </div>
+        <div class="progress-area">
+          <span id="progressLabel">1/6</span>
+          <div class="progress-track"><span id="progressBar"></span></div>
+        </div>
+      </div>
+
+      <div class="book-stage">
+        <div class="book-spine" aria-hidden="true"></div>
+        <article id="questionPage" class="question-page">
+          <div class="page-corner page-corner--top"></div>
+          <div class="page-corner page-corner--bottom"></div>
+          <div class="page-number" id="pageNumber">01</div>
+          <div class="question-content">
+            <span id="questionKicker" class="question-kicker">Antes de escolher a história...</span>
+            <h3 id="questionText"></h3>
+            <p id="questionHelp" class="question-help"></p>
+            <div id="answersList" class="answers-list"></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="quiz-actions no-print">
+        <button id="backButton" class="ghost-button" type="button" disabled>← Voltar</button>
+        <span class="keyboard-hint">Toque em uma alternativa para virar a página</span>
+      </div>
+    </section>
+
+    <section id="loadingScreen" class="loading-screen is-hidden" aria-live="assertive">
+      <div class="loading-book" aria-hidden="true">
+        <div></div><div></div><div></div>
+      </div>
+      <span class="eyebrow">Consultando o acervo</span>
+      <h2>Seu perfil está sendo revelado...</h2>
+      <p>Cruzando suas escolhas com as tags dos livros.</p>
+    </section>
+
+    <section id="resultScreen" class="result-screen is-hidden">
+      <div class="result-heading no-print">
+        <div>
+          <span class="eyebrow">Sua carta literária</span>
+          <h2>Resultado da descoberta</h2>
+        </div>
+        <div class="result-actions">
+          <button id="restartButton" class="ghost-button" type="button">Refazer teste</button>
+          <button id="printButton" class="primary-button" type="button">Imprimir resultado</button>
+        </div>
+      </div>
+
+      <div class="result-layout">
+        <article id="profileCard" class="profile-card">
+          <div class="profile-card__shine"></div>
+          <div class="profile-card__header">
+            <span class="profile-card__series">BIBLIOTECA • SENAC FRANCA</span>
+            <span id="profileLevelBadge" class="profile-card__level">INTERMEDIÁRIO</span>
+          </div>
+
+          <div class="profile-card__portrait">
+            <div id="avatarContainer" class="avatar-container" aria-label="Avatar do perfil"></div>
+            <span class="portrait-grid" aria-hidden="true"></span>
+          </div>
+
+          <div class="profile-card__identity">
+            <span class="profile-card__caption">PERFIL DO LEITOR</span>
+            <h3 id="profileName">Aventureiro</h3>
+           <strong> <p id="profileDescription"></p> </strong>
+          </div>
+
+          <div class="profile-card__stats">
+            <div><span>IMAGINAÇÃO</span><strong id="statImagination">88</strong></div>
+            <div><span>CURIOSIDADE</span><strong id="statCuriosity">92</strong></div>
+            <div><span>DESAFIO</span><strong id="statChallenge">76</strong></div>
+          </div>
+
+          <div class="profile-card__footer">
+            <span id="profileCode">PT-000</span>
+            <span>EDIÇÃO SENAC</span>
+          </div>
+        </article>
+
+        <section class="recommendations-panel">
+          <div class="recommendations-panel__intro">
+            <span class="eyebrow">Selecionados para você</span>
+            <h3>Cinco portas para sua próxima leitura</h3>
+          </div>
+          <ol id="bookRecommendations" class="book-recommendations"></ol>
+        </section>
+      </div>
+
+      <footer class="receipt-footer">
+        <strong>Biblioteca Senac</strong>
+        <span>Leve esta lista ao balcão e encontre sua próxima história.</span>
+      </footer>
+    </section>
+  </main>
+
+  <template id="bookTemplate">
+    <li class="book-item">
+      <span class="book-item__number"></span>
+      <div class="book-item__copy">
+        <h4></h4>
+        <p></p>
+      </div>
+      <span class="level-pill"></span>
+    </li>
+  </template>
+
+  <script src="{{ url_for('static', filename='js/avatars.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

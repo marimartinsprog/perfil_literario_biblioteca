@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel do Acervo | Perfil Literário</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="admin-body">
+  <main class="admin-shell">
+    <a class="brand admin-brand" href="/">
+      <span class="brand__mark">B</span>
+      <span><strong>Perfil Literário</strong><small>Voltar ao questionário</small></span>
+    </a>
+
+    {% if not authenticated %}
+      <section class="admin-card admin-card--login">
+        <span class="eyebrow">Área restrita</span>
+        <h1>Gerenciamento do acervo</h1>
+        <p>Entre com a senha administrativa para atualizar a base de livros.</p>
+        {% if error %}<div class="alert alert--error">{{ error }}</div>{% endif %}
+        <form method="post" class="admin-form">
+          <input type="hidden" name="action" value="login">
+          <label>Senha
+            <input type="password" name="password" autocomplete="current-password" required>
+          </label>
+          <button class="primary-button" type="submit">Entrar</button>
+        </form>
+      </section>
+    {% else %}
+      <header class="admin-header">
+        <div>
+          <span class="eyebrow">Painel administrativo</span>
+          <h1>Acervo da biblioteca</h1>
+          <p>Atualize os livros sem alterar o código do projeto.</p>
+        </div>
+        <form action="{{ url_for('admin_logout') }}" method="post">
+          <button class="ghost-button" type="submit">Sair</button>
+        </form>
+      </header>
+
+      {% if success %}
+        <div class="alert {% if success.startswith('Erro:') %}alert--error{% else %}alert--success{% endif %}">{{ success }}</div>
+      {% endif %}
+
+      <section class="admin-metrics">
+        <article><span>Acervo atual</span><strong>{{ total }}</strong><small>livros cadastrados</small></article>
+        <article><span>Última atualização</span><strong class="metric-date">{{ meta.get('updated_at', 'Não informado') }}</strong><small>{{ meta.get('source', 'Acervo inicial') }}</small></article>
+      </section>
+
+      <div class="admin-grid">
+        <section class="admin-card">
+          <span class="admin-card__icon">↑</span>
+          <h2>Enviar arquivo</h2>
+          <p>Use CSV ou XLSX com as colunas <strong>TÍTULO</strong> e <strong>AUTOR</strong>. A coluna Cód é opcional.</p>
+          <form action="{{ url_for('admin_upload') }}" method="post" enctype="multipart/form-data" class="admin-form">
+            <label class="file-drop">
+              <input type="file" name="arquivo" accept=".csv,.xlsx" required>
+              <span>Selecionar arquivo do acervo</span>
+              <small>Limite de 8 MB</small>
+            </label>
+            <button class="primary-button" type="submit">Processar e substituir acervo</button>
+          </form>
+        </section>
+
+        <section class="admin-card">
+          <span class="admin-card__icon">↻</span>
+          <h2>Google Sheets</h2>
+          <p>Cole o link de uma planilha pública. A aba selecionada pelo parâmetro GID será sincronizada.</p>
+          <form action="{{ url_for('admin_sheets') }}" method="post" class="admin-form">
+            <label>Link público da planilha
+              <input type="url" name="sheets_url" placeholder="https://docs.google.com/spreadsheets/d/..." required>
+            </label>
+            <button class="primary-button" type="submit">Sincronizar agora</button>
+          </form>
+        </section>
+      </div>
+
+      <section class="admin-note">
+        <strong>Como a classificação funciona</strong>
+        <p>O sistema analisa título e autor para gerar tags literárias e classificar cada obra como iniciante, intermediária ou avançada. As recomendações usam Similaridade de Jaccard e diversidade de autores.</p>
+      </section>
+    {% endif %}
+  </main>
+</body>
+</html>
